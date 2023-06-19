@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "check": "ts-node ./src/index",
-    "preview": "tsc"
+    "preview": "tsc",
+    "migrate": "knex migrate:make ${npm_config_filename} -x ts",
+    "migrate-latest": "knex migrate:latest",
+    "migrate-rollback": "knex migrate:rollback",
+    "start":"nodemon ./src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +19,7 @@
     "@typescript-eslint/eslint-plugin": "^5.59.11",
     "@typescript-eslint/parser": "^5.59.11",
     "eslint": "^8.43.0",
+    "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.3"
   },
