@@ -9,13 +9,14 @@
     "migrate": "knex migrate:make ${npm_config_filename} -x ts",
     "migrate-latest": "knex migrate:latest",
     "migrate-rollback": "knex migrate:rollback",
-    "start":"nodemon ./src/index.ts"
+    "start": "nodemon ./src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.3.1",
+    "@types/validatorjs": "^3.15.0",
     "@typescript-eslint/eslint-plugin": "^5.59.11",
     "@typescript-eslint/parser": "^5.59.11",
     "eslint": "^8.43.0",
@@ -26,6 +27,7 @@
   "dependencies": {
     "dotenv": "^16.3.0",
     "knex": "^2.4.2",
-    "pg": "^8.11.0"
+    "pg": "^8.11.0",
+    "validatorjs": "^3.22.1"
   }
 }

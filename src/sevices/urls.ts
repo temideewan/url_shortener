@@ -76,6 +76,6 @@ export const getUrls = async (user_id: number, limit = 15, offset = 0) => {
     .limit(limit)
     .offset(offset);
 
-    return results;
+    return results; 
 };
 
