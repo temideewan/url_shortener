@@ -25,7 +25,7 @@ export interface Visit {
 declare module "knex/types/tables" {
   interface Tables {
     users: User;
-    urls: URL;
+    urls: Url;
     visits: Visit;
   }
 }
