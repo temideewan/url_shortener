@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Validator from "validatorjs";
+import httpError  from "http-errors";
 
 type RequestBody = { [key: string]: any };
 
@@ -13,7 +15,7 @@ const validateBody = (
     Object.keys(errors).forEach((key) => {
       aggregatedErrors.push(validator.errors.first(key) as string);
     });
-   throw new Error(aggregatedErrors.join(" , "));
+    throw new httpError.BadRequest(aggregatedErrors.join(" , "))
   } else {
     return true;
   }
@@ -22,7 +24,7 @@ const validateBody = (
 export const validateCreateShortURL = async (body: RequestBody) =>
   validateBody(body, {
     url: "url|required",
-    id: "string|min:5|max:10",
+    id: "string|min:5|max:10", 
   });
 
 export const validateUpdateShortURL = async (body: RequestBody) =>

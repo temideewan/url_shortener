@@ -1,26 +1,30 @@
 import knex from "../config/knex";
+import httpError from "http-errors";
+import { validateCreateShortURL, validateUpdateShortURL } from "./validations";
 
 export const createShortURL = async (
   body: { url: string; id?: string },
   user_id: number
 ) => {
-  if (!body.url) {
-    throw new Error("URL is required");
-  }
-  if (body.id) {
-    const currentRecord = await knex("urls").where({ id: body.id }).first();
-    if (currentRecord) {
-      throw new Error(
-        "The ID that you provided already exists in the database"
-      );
+   await validateCreateShortURL(body);
+    if (!body.url) {
+      throw new Error("URL is required");
     }
-  }
-  const results = await knex("urls").insert(
-    { url: body.url, id: body.id, user_id },
-    "*"
-  );
+    if (body.id) {
+      const currentRecord = await knex("urls").where({ id: body.id }).first();
+      if (currentRecord) {
+        throw new httpError.Conflict(
+          "The ID that you provided already exists in the database"
+        );
+      }
+    }
+    const results = await knex("urls").insert(
+      { url: body.url, id: body.id, user_id },
+      "*"
+    );
 
-  return results[0];
+    return results[0];
+ 
 };
 
 export const resolveURL = async (id: string) => {
@@ -36,17 +40,16 @@ export const updateURL = async (
   body: { url: string },
   user_id: number
 ) => {
-  if (!body.url) {
-    throw new Error("The URL is required");
-  }
-
+  validateUpdateShortURL(body);
   const url = await knex("urls").where({ id }).select(["user_id"]).first();
   if (!url) {
-    throw new Error("URL not found");
+    throw new httpError.NotFound("URL not found");
   }
 
   if (url.user_id !== user_id) {
-    throw new Error("You don't have the privilege to update this url");
+    throw new httpError.Unauthorized(
+      "You don't have the privilege to update this url"
+    );
   }
 
   const results = await knex("urls")
@@ -60,11 +63,13 @@ export const updateURL = async (
 export const deleteURL = async (id: string, user_id: number) => {
   const url = await knex("urls").where({ id }).select(["user_id"]).first();
   if (!url) {
-    throw new Error("URL not found");
+    throw new httpError.NotFound("URL not found");
   }
 
   if (url.user_id !== user_id) {
-    throw new Error("You don't have the privilege to update this url");
+    throw new httpError.Unauthorized(
+      "You don't have the privilege to update this url"
+    );
   }
 
   await knex("urls").where({ id }).delete();
@@ -76,6 +81,5 @@ export const getUrls = async (user_id: number, limit = 15, offset = 0) => {
     .limit(limit)
     .offset(offset);
 
-    return results; 
+  return results;
 };
-

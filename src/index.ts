@@ -1,13 +1,12 @@
 import "dotenv/config";
-import knex, { onDatabaseConnect } from "./config/knex";
-import Validator from "validatorjs";
+import  { onDatabaseConnect } from "./config/knex";
 
 const main = async () => {
   try {
     await onDatabaseConnect();
     console.log("database connected");
-  } catch (error) {
-    console.log(error);
+  } catch (error) {  
+      console.log(error);
   }
 };
 
